@@ -32,7 +32,7 @@ if __name__ == '__main__':
     string_date=today.strftime("%Y-%m-%d")
 
 
-    # data file
+    # data file just to know its size
     file_data = "Ex9_2_data.xlsx"
 
     df = pd.read_excel(file_data, header=2)
@@ -49,9 +49,15 @@ if __name__ == '__main__':
     df_data["ra"] = myra.degree  # convert right ascenssion into degrees
     df_data["dec"] = df2.values  # keep declination into degrees
 
+    # size of data
     Nobj = len(df_data)
     array_shape = df_data.shape
 
+    # random
+    random_sky = np.random.uniform(0, 5, array_shape)
+    df_n = pd.DataFrame()
+    df_n["ra"] = random_sky[:, 0]
+    df_n["dec"] = random_sky[:, 1]
 
     # histogram config
     THETAS = np.arange(0, 10, 0.05)
@@ -63,9 +69,14 @@ if __name__ == '__main__':
     NBINS += 1
 
     # loop on each element in the original dataframe
-    df0 = df_data
-    for index, row in df_data.iterrows():
 
+    # loop on each element in the original dataframe
+    df0 = df_n.copy()
+
+    df0.reset_index()
+    df_n.reset_index()
+
+    for index, row in df_n.iterrows():
         # isolate the current element
         ra0 = row['ra']
         dec0 = row['dec']
@@ -76,17 +87,19 @@ if __name__ == '__main__':
         df0.drop(index, inplace=True)  # erase one by one
 
         df0["dist"] = df0.apply(dist_row, axis=1)
-
         if index == 0:
             histo = np.histogram(df0["dist"].values, bins=NBINS, range=(BINSTART, BINSTOP))[0]
         else:
             histo += np.histogram(df0["dist"].values, bins=NBINS, range=(BINSTART, BINSTOP))[0]
 
 
-        NDD=histo
 
-        filename_histo = string_date + "_ndd.npy"
-        np.save(filename_histo, NDD)
+    # save histo
+
+    NRR=histo
+
+    filename_histo = string_date + "_nrr.npy"
+    np.save(filename_histo, NRR)
 
 
 

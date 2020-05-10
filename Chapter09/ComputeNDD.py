@@ -49,6 +49,7 @@ if __name__ == '__main__':
     df_data["ra"] = myra.degree  # convert right ascenssion into degrees
     df_data["dec"] = df2.values  # keep declination into degrees
 
+    # size of data
     Nobj = len(df_data)
     array_shape = df_data.shape
 
@@ -64,6 +65,10 @@ if __name__ == '__main__':
 
     # loop on each element in the original dataframe
     df0 = df_data.copy()
+
+    df0.reset_index()
+    df_data.reset_index()
+
     for index, row in df_data.iterrows():
 
         # isolate the current element

@@ -49,6 +49,7 @@ if __name__ == '__main__':
     df_data["ra"] = myra.degree  # convert right ascenssion into degrees
     df_data["dec"] = df2.values  # keep declination into degrees
 
+    # size of data
     Nobj = len(df_data)
     array_shape = df_data.shape
 
@@ -71,10 +72,17 @@ if __name__ == '__main__':
 
     # loop on each element in the original dataframe
     df2 = df_n.copy()
+
+    df2.reset_index()
+    df_data.reset_index()
+
     for index, row in df_data.iterrows():
         # isolate the current element
         ra0 = row['ra']
         dec0 = row['dec']
+
+        if index % 1000 == 0:
+            print(index, " ra0=", ra0, " dec0=", dec0)
 
         df2["dist"] = df2.apply(dist_row, axis=1)
         if index == 0:
@@ -88,7 +96,7 @@ if __name__ == '__main__':
     NDR=histo
 
     filename_histo = string_date + "_ndr.npy"
-    np.save(filename_histo, NDD)
+    np.save(filename_histo, NDR)
 
 
 
